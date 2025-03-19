@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Your Encrypted Images</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4ece2;
+            color: #333;
+            padding: 20px;
+        }
+
+        h1 {
+            text-align: center;
+            margin-bottom: 20px;
+        }
+
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+        }
+
+        /* Table Styling */
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-bottom: 30px;
+        }
+
+        th, td {
+            padding: 12px;
+            text-align: center;
+            border: 1px solid #ddd;
+        }
+
+        th {
+            background-color: #333;
+            color: white;
+        }
+
+        td img {
+            max-width: 150px;
+            height: auto;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Action buttons */
+        .action-btn {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        .btn {
+            padding: 12px 20px;
+            font-size: 14px;
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            width: 100%;
+            gap: 15px;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .btn-primary {
+            background-color: #007bff;
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: #0056b3;
+        }
+
+        .btn-success {
+            background-color: #28a745;
+            color: white;
+            
+        }
+
+        .btn-success:hover {
+            background-color: #218838;
+        }
+
+        .btn-danger {
+            background-color: #dc3545;
+            color: white;
+           margin-top: 20px;
+        }
+
+        .btn-danger:hover {
+            background-color: #c82333;
+        }
+
+        .btn-secondary {
+            background-color: #6c757d;
+            color: white;
+        }
+
+        .btn-secondary:hover {
+            background-color: #5a6268;
+        }
+
+        /* Specific Adjustments for Go Back Button */
+        .back-btn {
+            padding: 12px 20px; /* Match the padding of other buttons */
+            font-size: 14px;     /* Same font size */
+            text-align: center;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background-color: #6c757d; /* Same as the secondary button */
+            color: white;
+            box-shadow: 0px 2px 5px rgba(0, 0, 0, 0.1);
+            width: 10%;
+        }
+
+        .back-btn:hover {
+            background-color: #5a6268;
+        }
+
+        .password-input-container {
+            display: none;
+            margin-top: 10px;
+        }
+
+        .password-input-container input {
+            width: 100%;
+            padding: 12px;
+            margin-bottom: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+        }
+
+        .password-input-container button {
+            width: 100%;
+        }
+
+        /* Action Container */
+        .action-container {
+            display: none;
+        }
+
+        /* Decrypted Image Section */
+        .decrypted-image {
+            max-width: 300px;
+            margin: 50px 0;
+            display: block;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        /* Utility Styles */
+        .center-text {
+            text-align: center;
+        }
+
+        .mt-5 {
+            margin-top: 40px;
+        }
+
+        .mb-4 {
+            margin-bottom: 30px;
+        }
+
+
+        /* Flash Message */
+        .flash-message {
+            padding: 10px;
+            margin-bottom: 20px;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+       /* Modal Styles */
+.modal {
+    display: none; /* Hidden by default */
+    position: fixed; /* Fixed position */
+    z-index: 1000; /* Sit on top */
+    left: 0;
+    top: 0;
+    width: 100%; /* Full width */
+    height: 100%; /* Full height */
+    overflow: auto; /* Enable scroll if needed */
+    background-color: rgba(0, 0, 0, 0.7); /* Dark background with transparency */
+    padding-top: 50px; /* Space from top for the modal */
+    transition: opacity 0.3s ease, visibility 0.3s ease; /* Smooth fade-in effect */
+}
+
+/* Modal Content */
+.modal-content {
+    background-color: #fff;
+    margin: 10% auto; /* Center modal */
+    padding: 30px;
+    border: 1px solid #ddd;
+    width: 80%;
+    max-width: 450px;
+    border-radius: 10px; /* Rounded corners */
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3); /* Soft shadow */
+    animation: modal-fade-in 0.4s ease-in-out; /* Smooth fade-in animation */
+}
+
+/* Modal Header */
+.modal-header {
+    font-size: 22px;
+    margin-bottom: 20px;
+    font-weight: bold;
+    color: #333;
+}
+
+/* Modal Body */
+.modal-body {
+    margin-bottom: 20px;
+    font-size: 16px;
+    color: #555;
+}
+
+.modal-body input {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    font-size: 16px;
+}
+
+/* Modal Footer */
+.modal-footer {
+    display: flex;
+    justify-content: space-between;
+    margin-top: 20px;
+}
+
+/* Modal Close Button */
+.modal-close {
+    background-color: #dc3545;
+    color: white;
+    border: none;
+    padding: 10px 20px;
+    font-size: 14px;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+.modal-close:hover {
+    background-color: #c82333;
+}
+
+/* Animation for Modal Fade In */
+@keyframes modal-fade-in {
+    0% {
+        opacity: 0;
+        transform: scale(0.9);
+    }
+    100% {
+        opacity: 1;
+        transform: scale(1);
+    }
+}
+
+/* Make modal responsive */
+@media (max-width: 600px) {
+    .modal-content {
+        width: 90%; /* Make modal content take more space on smaller screens */
+        margin-top: 20%; /* Adjust the top margin */
+    }
+}
+
+/* Modal Transparency and Animation */
+.modal.show {
+    display: block; /* Show the modal */
+    opacity: 1;
+    visibility: visible;
+}
+
+.modal.hide {
+    display: none;
+    opacity: 0;
+    visibility: hidden;
+}
+.button {
+  background-color: white; /* Default button color */
+  width: 7rem; /* 48px equivalent */
+  height: 2.5rem; /* 14px equivalent */
+  border-radius: 1.25rem; /* 2xl rounded corners */
+  text-align: center;
+  font-size: 1.25rem; /* 20px */
+  font-weight: 600;
+  color: black;
+  position: fixed; /* Change to fixed positioning */
+  top: 10px; /* Distance from the top */
+  right: 10px; /* Distance from the right */
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #140202; /* Set visible border color to green */
+  transition: all 0.3s ease; /* Smooth transition for all properties */
+}
+
+/* Hover effect: Background color changes to green */
+.button:hover {
+  background-color: #48bb78; /* Green background color */
+  border-color: #48bb78; /* Green border on hover */
+}
+
+/* Text color changes to white when hovered */
+.button:hover .button-text {
+  color: white; /* Change text color to white */
+}
+
+/* The text inside the button */
+.button .button-text {
+  padding-left: 0.5rem; /* 2px offset */
+  position: relative;
+  z-index: 1; /* Text always on top */
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Optional: Animation when hovered */
+.button:hover .button-text {
+  transform: translateX(0.5rem); /* Slight movement when hovered */
+}
+
+/* SVG icon styles */
+.button svg {
+  width: 1.5rem; /* 25px */
+  height: 1.5rem; /* 25px */
+  fill: black; /* Default icon color */
+  transition: fill 0.3s ease; /* Smooth transition for icon color */
+}
+
+/* Icon color changes to white when button is hovered */
+.button:hover svg {
+  fill: white; /* Change icon color to white */
+}
+
+
+
+    </style>
+</head>
+<body>
+
+    <!-- Flash Message (if any) -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+    {% if messages %}
+        <div class="flash-message {{ messages[0][0] }}">
+            {{ messages[0][1] }}
+        </div>
+    {% endif %}
+{% endwith %}
+
+<a href="{{ url_for('encrypt') }}" class="button-link"> 
+    <button class="button" type="button">
+      <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" height="25px" width="25px">
+        <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="#000000"></path>
+        <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="#000000"></path>
+      </svg>
+      <span class="button-text">Back</span> <!-- Add your button text here -->
+    </button>
+  </a>
+
+    <div class="container">
+        <h1>Your Encrypted Images</h1>
+
+        <!-- Table to display images and actions -->
+        <table>
+            <thead>
+                <tr>
+                    <th>Image Name</th>
+                    <th>Encrypted Image</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for file_path, bin_file_path, original_filename in images %}
+                <tr>
+                    <td>{{ original_filename }}</td>
+                    <td>
+                        <!-- Clickable Image -->
+                        <img src="{{ file_path }}" alt="Encrypted Image" onclick="showActionOptions('{{ bin_file_path }}')">
+                    </td>
+                    <td class="action-btn">
+                        <!-- Action Container for Decrypt and Delete (Initially hidden) -->
+                        <div id="action-container-{{ bin_file_path }}" class="action-container">
+                            <!-- Decrypt Button and Password Input -->
+                            <button type="button" class="btn btn-primary" onclick="togglePasswordInput('{{ bin_file_path }}')">Decrypt</button>
+
+                            <!-- Password input (hidden by default) -->
+                            <div id="password-input-container-{{ bin_file_path }}" class="password-input-container">
+                                <form action="{{ url_for('decrypt_route') }}" method="POST">
+                                    <input type="hidden" name="bin_file_path" value="{{ bin_file_path }}">
+                                    <input type="password" name="encryption_password" class="form-control" placeholder="Enter Encryption Password" required>
+                                    <button type="submit" class="btn btn-success">Submit Password</button>
+                                </form>
+                                <button type="button" class="btn btn-secondary mt-2" onclick="cancelPasswordInput('{{ bin_file_path }}')">Cancel</button>
+                            </div>
+
+                            <!-- Delete Form -->
+                            <form action="{{ url_for('delete_image') }}" method="POST" style="display:inline;">
+                                <input type="hidden" name="bin_file_path" value="{{ bin_file_path }}">
+                                <input type="hidden" name="file_path" value="{{ file_path }}">
+                                <button type="submit" class="btn btn-danger">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+
+        <!-- Display Decrypted Image -->
+        {% if decrypted_image_path %}
+        <div class="mt-5">
+            <h2 class="center-text">Decrypted Image</h2>
+            <img src="{{ decrypted_image_path }}" alt="Decrypted Image" class="decrypted-image">
+            <p class="center-text">Decrypted Image Name: {{ decrypted_image_path.split('/')[-1] }}</p>
+
+            <div class="action-btn center-text">
+                <!-- Download Button -->
+                <form action="{{ url_for('download_decrypted') }}" method="GET" style="width: 48%;">
+                    <button type="submit" class="btn btn-success">Download Decrypted Image</button>
+                </form>
+
+                <!-- Go Back Button -->
+                <a href="{{ url_for('go_back') }}" class="back-btn">Cancel</a>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+
+    <!-- Password Modal -->
+    <div id="password-modal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3>Enter Decryption Password</h3>
+            </div>
+            <div class="modal-body">
+                <form action="{{ url_for('decrypt_route') }}" method="POST">
+                    <input type="hidden" name="bin_file_path" id="modal-bin-file-path">
+                    <input type="password" name="encryption_password" class="form-control" placeholder="Enter Encryption Password" required>
+                    <button type="submit" class="btn btn-success">Submit Password</button>
+                </form>
+            </div>
+            <div class="modal-footer">
+                <button class="modal-close" onclick="closeModal()">Close</button>
+            </div>
+        </div>
+    </div>
+
+
+
+    <!-- Optional: Custom JS -->
+    <script>
+        // Function to show Decrypt and Delete options when the image is clicked
+        function showActionOptions(binFilePath) {
+            // Hide all other action containers
+            const allActionContainers = document.querySelectorAll('.action-container');
+            allActionContainers.forEach(container => {
+                container.style.display = 'none';
+            });
+
+            // Show the action container for the clicked image
+            const container = document.getElementById('action-container-' + binFilePath);
+            container.style.display = 'block'; // Show the action options for the selected image
+        }
+
+        // Function to open the password modal
+        function togglePasswordInput(binFilePath) {
+            const modal = document.getElementById('password-modal');
+            modal.style.display = "block"; // Show the modal
+            document.getElementById('modal-bin-file-path').value = binFilePath; // Set the bin file path for decryption
+        }
+
+        // Function to close the password modal
+        function closeModal() {
+            const modal = document.getElementById('password-modal');
+            modal.style.display = "none"; // Close the modal
+        }
+
+        // Function to cancel password input and hide it
+        function cancelPasswordInput(binFilePath) {
+            const container = document.getElementById('password-input-container-' + binFilePath);
+            container.style.display = 'none'; // Hide the password input container
+        }
+    </script>
+</body>
+</html>

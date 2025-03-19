@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Login - Image Encryptor</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            background: #d1c8c1;
+            color: #333;
+            flex-direction: column; /* Added this to align flash message vertically */
+        }
+
+        .app-container {
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+            margin-top: 20px;
+        }
+
+        .header img {
+            max-width: 100px;
+            margin-bottom: 20px;
+        }
+
+        .header h2 {
+            font-size: 28px;
+            color: #ff5733;
+            margin-bottom: 10px;
+        }
+
+        .header p {
+            font-size: 16px;
+            color: #666;
+            margin-bottom: 25px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+            text-align: left;
+        }
+
+        .input-group label {
+            display: block;
+            margin-bottom: 5px;
+            color: #333;
+        }
+
+        .input-group i {
+            margin-right: 10px;
+            color: #ff5733; /* Icon color */
+        }
+
+        input[type="text"],
+        input[type="password"] {
+            width: 100%;
+            padding: 15px;
+            margin-top: 5px;
+            border: 2px solid #ff5733;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            transition: background-color 0.3s ease, border-color 0.3s ease;
+        }
+
+        input[type="text"]:focus,
+        input[type="password"]:focus {
+            border-color: #ff8c00;
+            outline: none;
+        }
+
+        .primary-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff5733;
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+
+        .primary-button:hover {
+            background-color: #c70039;
+            transform: scale(1.05);
+        }
+
+        .remember-me-container {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 10px 0;
+            font-size: 14px;
+        }
+
+        .switch-text {
+            margin-top: 15px;
+            font-size: 14px;
+        }
+
+        .switch-text a {
+            color: #33c1ff;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .switch-text a:hover {
+            color: #0096c7;
+        }
+
+        /* Flash Message */
+        .flash-message {
+            width: 100%;
+            max-width: 450px;
+            padding: 10px;
+            color: #333;
+            margin-bottom: 10px;
+            text-align: center;
+            border-radius: 0px;
+            font-weight: bold;
+            font-size: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+        }
+
+        /* Animation for flash message */
+        @keyframes fadeIn {
+            0% { opacity: 0; }
+            100% { opacity: 1; }
+        }
+
+        .button {
+  background-color: white; /* Default button color */
+  width: 8rem; /* 48px equivalent */
+  height: 2.5rem; /* 14px equivalent */
+  border-radius: 1.25rem; /* 2xl rounded corners */
+  text-align: center;
+  font-size: 1.25rem; /* 20px */
+  font-weight: 600;
+  color: black;
+  position: fixed; /* Change to fixed positioning */
+  top: 10px; /* Distance from the top */
+  right: 10px; /* Distance from the right */
+  overflow: hidden;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  border: 2px solid #140202; /* Set visible border color to green */
+  transition: all 0.3s ease; /* Smooth transition for all properties */
+}
+
+/* Hover effect: Background color changes to green */
+.button:hover {
+  background-color: #48bb78; /* Green background color */
+  border-color: #48bb78; /* Green border on hover */
+}
+
+/* Text color changes to white when hovered */
+.button:hover .button-text {
+  color: white; /* Change text color to white */
+}
+
+/* The text inside the button */
+.button .button-text {
+  padding-left: 0.5rem; /* 2px offset */
+  position: relative;
+  z-index: 1; /* Text always on top */
+  transition: transform 0.3s ease, color 0.3s ease;
+}
+
+/* Optional: Animation when hovered */
+.button:hover .button-text {
+  transform: translateX(0.5rem); /* Slight movement when hovered */
+}
+
+/* SVG icon styles */
+.button svg {
+  width: 1.5rem; /* 25px */
+  height: 1.5rem; /* 25px */
+  fill: black; /* Default icon color */
+  transition: fill 0.3s ease; /* Smooth transition for icon color */
+}
+
+/* Icon color changes to white when button is hovered */
+.button:hover svg {
+  fill: white; /* Change icon color to white */
+}
+    </style>
+</head>
+<body>
+
+    <!-- Flash Message (if any) - Positioned Above the Form -->
+    {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            <div class="flash-message {{ messages[0][0] }}">
+                {{ messages[0][1] }}
+            </div>
+        {% endif %}
+    {% endwith %}
+
+    <a href="{{ url_for('first') }}" class="button-link"> 
+        <button class="button" type="button">
+          <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1024 1024" height="25px" width="25px">
+            <path d="M224 480h640a32 32 0 1 1 0 64H224a32 32 0 0 1 0-64z" fill="#000000"></path>
+            <path d="m237.248 512 265.408 265.344a32 32 0 0 1-45.312 45.312l-288-288a32 32 0 0 1 0-45.312l288-288a32 32 0 1 1 45.312 45.312L237.248 512z" fill="#000000"></path>
+          </svg>
+          <span class="button-text">Back</span> <!-- Add your button text here -->
+        </button>
+      </a>
+      
+
+    <div class="app-container">
+        <header class="header">
+           
+            <h2>Login</h2>
+            <p>Please sign in to continue.</p>
+        </header>
+        <form id="loginForm" action="{{ url_for('login') }}" method="POST">
+            <div class="input-group">
+                <label for="username"><i class="fas fa-user"></i> Username</label>
+                <input type="text" id="username" name="username" placeholder="Username" required>
+            </div>
+            <div class="input-group">
+                <label for="password"><i class="fas fa-lock"></i> Password</label>
+                <input type="password" id="password" name="password" placeholder="Password" required>
+            </div>
+            <div class="remember-me-container">
+                <label>
+                    <input type="checkbox" name="remember"> Remember me
+                </label>
+            </div>
+            <button type="submit" class="primary-button">Sign In</button>
+        </form>
+        <p class="switch-text">Don't have an account? <a href="{{ url_for('register') }}">Sign Up</a></p>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>

@@ -1,0 +1,287 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Encrypt Image - Image Encryptor</title>
+    <style>
+        /* General Reset */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Arial', sans-serif;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            flex-direction: column;
+            height: 100vh;
+            background: #d1c8c1; /* Warm gradient */
+            color: #333;
+        }
+
+        /* Navigation Bar */
+        .navbar {
+            width: 100%;
+            background-color: #f0f0f0;
+            padding: 10px 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+
+        .navbar a {
+            color: #86654b;
+            font-size: 16px;
+            padding: 10px 20px;
+            text-decoration: none;
+            text-align: center;
+            margin: 0 15px;
+            border-radius: 5px;
+            transition: background-color 0.3s ease;
+        }
+
+        .navbar a:hover {
+            background-color: #ff5733;
+        }
+
+        /* Main container */
+        .app-container {
+            margin-top: 80px; /* To prevent content from being hidden under the navbar */
+            width: 100%;
+            max-width: 450px;
+            padding: 30px;
+            background-color: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            text-align: center;
+        }
+
+        /* Header */
+        .header h2 {
+            font-size: 28px;
+            color: #ff5733;
+            margin-bottom: 20px;
+        }
+
+        /* Form container */
+        .form-container {
+            text-align: left;
+        }
+
+        /* Label */
+        .form-container label {
+            display: block;
+            margin-bottom: 10px;
+            color: #333;
+        }
+
+        /* Input Fields */
+        input[type="file"] {
+            width: 100%;
+            padding: 15px;
+            margin: 10px 0;
+            border: none;
+            background-color: #f0f4f8;
+            border-radius: 10px;
+            font-size: 16px;
+            color: #333;
+            transition: background-color 0.3s ease;
+            display: none; /* Hide the file input initially */
+        }
+
+        input[type="file"]:focus {
+            background-color: #e6ebf0;
+            outline: none;
+        }
+
+        /* Buttons */
+        .primary-button {
+            width: 100%;
+            padding: 15px;
+            background-color: #ff5733; /* Vibrant color */
+            color: #fff;
+            font-size: 16px;
+            font-weight: bold;
+            border: none;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+            margin-top: 20px;
+        }
+
+        .primary-button:hover {
+            background-color: #c70039; /* Darker shade */
+            transform: scale(1.05);
+        }
+
+        /* Password Field Popup */
+        #password-popup {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background-color: rgba(255, 255, 255, 0.9);
+            padding: 20px;
+            border-radius: 15px;
+            box-shadow: 0 8px 30px rgba(0, 0, 0, 0.3);
+            z-index: 1001;
+            text-align: center;
+        }
+
+        #password-popup input[type="password"] {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 20px;
+            border-radius: 10px;
+            border: 1px solid #ddd;
+            font-size: 16px;
+        }
+
+        #password-popup .popup-buttons {
+            display: flex;
+            justify-content: space-between;
+        }
+
+        .cancel-button {
+            background-color: #dc3545;
+        }
+
+        .submit-button {
+            background-color: #28a745;
+        }
+
+        /* Overlay */
+        .overlay {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+        }
+
+        /* Flash Messages Container */
+        .flash-messages {
+            width: 100%;
+            max-width: 450px;
+            padding: 10px 30px;
+            margin-top: 80px; /* Offset to not hide under navbar */
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .alert {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            color: #000; /* Change text color to black */
+        }
+
+        .alert-success {
+            background-color: #d1c8c1;
+            color: black; /* Ensure black text */
+        }
+
+        .alert-danger {
+            background-color: #dc3545;
+            color: black; /* Ensure black text */
+        }
+
+        .alert-info {
+            background-color: #d1c8c1;
+            color: black; /* Ensure black text */
+        }
+    </style>
+</head>
+<body>
+    <!-- Navigation Bar -->
+    <nav class="navbar">
+        <a href="#home">Home</a>
+        <a href="{{ url_for('About_us') }}">About Us</a>
+        <a href="{{ url_for('Feedback') }}">Feedback</a>
+        <a href="#settings">Settings</a>
+        <a href="{{ url_for('your_data') }}">Your Data</a>
+        <a href="{{ url_for('logout') }}">Logout</a>
+    </nav>
+
+    <!-- Flash Messages (Below the Navbar) -->
+    <div class="flash-messages">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+        {% if messages %}
+            {% for category, message in messages %}
+                <div class="alert alert-{{ category }}">
+                    {{ message }}
+                </div>
+            {% endfor %}
+        {% endif %}
+        {% endwith %}
+    </div>
+
+    <div class="app-container">
+        <header class="header">
+            <h2>Encrypt Your Image</h2>
+        </header>
+        <div class="form-container">
+            <form id="uploadForm" action="{{ url_for('upload') }}" method="POST" enctype="multipart/form-data">
+                <button type="button" class="primary-button" onclick="document.getElementById('imageInput').click();">Choose Image</button>
+                <input type="file" id="imageInput" name="file" accept="image/*" required>
+                <!-- Hidden Password Field (Initially) -->
+                <input type="password" id="encryptionPassword" name="encryption_password" style="display: none;" required>
+                <div id="result"></div>
+                <button type="button" class="primary-button" id="encryptButton" onclick="showPasswordPopup();">Encrypt Image</button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Overlay (To block interactions when the popup is open) -->
+    <div class="overlay" id="overlay"></div>
+
+    <!-- Password Popup -->
+    <div id="password-popup">
+        <h3>Enter Encryption Password</h3>
+        <input type="password" id="popupPassword" name="encryption_password" required>
+        <div class="popup-buttons">
+            <button type="button" class="primary-button cancel-button" onclick="closePasswordPopup()">Cancel</button>
+            <button type="button" class="primary-button submit-button" onclick="submitForm()">Submit</button>
+        </div>
+    </div>
+
+    <script>
+        function showPasswordPopup() {
+            // Show the overlay and password popup
+            document.getElementById('overlay').style.display = 'block';
+            document.getElementById('password-popup').style.display = 'block';
+        }
+
+        function closePasswordPopup() {
+            // Hide the overlay and password popup
+            document.getElementById('overlay').style.display = 'none';
+            document.getElementById('password-popup').style.display = 'none';
+        }
+
+        function submitForm() {
+            // Get the password entered by the user
+            const password = document.getElementById('popupPassword').value;
+
+            // Set the password field in the form with the entered password
+            document.getElementById('encryptionPassword').value = password;
+
+            // Submit the form
+            document.getElementById('uploadForm').submit();
+
+            // Hide the popup after submission
+            closePasswordPopup();
+        }
+    </script>
+</body>
+</html>

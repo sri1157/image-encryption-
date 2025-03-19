@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Contact Us</title>
+    <style>
+        .body {
+            background-color: #d1c8c1;
+        }
+        .contact-form {
+            background-color: #f2f2f2;
+            padding: 20px;
+            border-radius: 10px;
+            max-width: 400px;
+            margin: 0 auto;
+            margin-top: 100px;
+        }
+
+        .contact-form label {
+            color: black;
+        }
+
+        .contact-form .heading {
+            font-size: 24px;
+            color: black;
+            margin-bottom: 12px;
+            font-weight: bold;
+            display: block;
+            text-align: center;
+        }
+
+        .contact-form form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        .contact-form label {
+            margin-bottom: 10px;
+        }
+
+        textarea {
+            resize: none;
+            height: 80px;
+            width: 100%;
+        }
+
+        .contact-form input, .contact-form textarea {
+            padding: 10px;
+            border: none;
+            border-radius: 5px;
+            margin-bottom: 20px;
+        }
+
+        .contact-form input:focus, .contact-form textarea:focus {
+            outline: none;
+            box-shadow: 0 0 5px #ff6384;
+            transform: scale(1.05);
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .contact-form button[type="submit"] {
+            background-color: #ff6384;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: transform 0.3s ease-in-out;
+        }
+
+        .contact-form button[type="submit"]:hover {
+            transform: scale(1.1);
+        }
+
+        /* Flash Message Style */
+        .flash-message {
+            color: black;
+            padding: 10px;
+            margin-bottom: 50px;
+            text-align: center;
+            border-radius: 5px;
+            font-weight: bold;
+            font-size: 20px;
+        }
+
+        .go-back-btn {
+            text-align: center;
+            display: block;
+            background-color: #ccc;
+            color: #333;
+            padding: 10px 20px;
+            border-radius: 5px;
+            text-decoration: none;
+            font-weight: bold;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .go-back-btn:hover {
+            background-color: #aaa;
+        }
+    </style>
+</head>
+<body>
+            <!-- Flash Message (if any) -->
+            {% with messages = get_flashed_messages(with_categories=true) %}
+                {% if messages %}
+                    <div class="flash-message {{ messages[0][0] }}">
+                        {{ messages[0][1] }}
+                    </div>
+                {% endif %}
+            {% endwith %}
+
+        <div class="contact-form">
+        <span class="heading">Contact Us</span>
+        <form action="/Contact_us" method="POST">
+            <!-- Name Field -->
+            <label for="name">Name:</label>
+            <input type="text" id="name" name="name" required="">
+
+            <!-- Email Field -->
+            <label for="email">Email:</label>
+            <input type="email" id="email" name="email" required="">
+
+            <!-- Message Field -->
+            <label for="message">Message:</label>
+            <textarea id="message" name="message" required=""></textarea>
+
+            <!-- Submit Button -->
+            <button type="submit">Submit</button>
+        </form>
+        
+        <!-- Go Back Button -->
+        <a href="{{ url_for('first') }}" class="go-back-btn">Go Back</a>
+    </div>
+</body>
+</html>

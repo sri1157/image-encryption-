@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>IMAGE ENCRYPTION</title>
+    <style>
+        /* Global Styling */
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            background-color: #d1c8c1;
+        }
+        .title {
+            margin-top: 2em;
+            font-size: 2.5em;
+            font-weight: bold;
+            color: #333;
+            text-align: center;
+            padding: 1em 0;
+        }
+        nav {
+            background-color: #f0f0f0;
+            color: #86654b;
+            padding: 20px 1em;
+            width: 100%;
+            text-align: center;
+            position: fixed;
+            top: 0;
+            z-index: 1000;
+        }
+        nav a {
+            color: #86654b;
+            text-decoration: none;
+            margin: 0 1em;
+            font-size: 1.2em;
+        }
+        nav a:hover {
+            color: #4CAF50;
+        }
+
+        /* Cards Section Styling */
+        .cards {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            padding: 2em;
+            width: 100%;
+            max-width: 1200px;
+            margin-top: 3em;
+            gap: 2rem;
+        }
+        .card {
+            border: 2px solid #333;
+            width: 30%;
+            min-width: 280px;
+            height: 250px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 1.2em;
+            text-align: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease, background-color 0.3s ease;
+            border-radius: 10px;
+            background-color: #fff;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+        .card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
+            background-color: #f0f0f0;
+        }
+        .card h3 {
+            font-size: 1.2em;
+            color: #333;
+            margin: 0;
+        }
+        .card p {
+            font-size: 1em;
+            color: #666;
+        }
+
+        /* Sign Up Button Styling */
+        .signup-button {
+            margin-top: 3em;
+            padding: 12px 36px; /* Adjusted padding for more width */
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+            font-size: 1.2em;
+            border-radius: 30px; /* Increased border-radius for oval shape */
+            transition: background-color 0.3s ease, transform 0.3s ease; /* Added transform transition */
+        }
+        .signup-button:hover {
+            background-color: #45a049;
+            transform: scale(1.05); /* Scale up on hover */
+        }
+
+        /* Responsive Design for smaller screens */
+        @media screen and (max-width: 768px) {
+            .cards {
+                flex-direction: column;
+                align-items: center;
+                padding: 1em;
+            }
+            .card {
+                width: 80%;
+                margin-bottom: 2em;
+            }
+            nav a {
+                margin: 0 0.5em;
+                font-size: 1em;
+            }
+            .signup-button {
+                font-size: 1em;
+                padding: 10px 20px;
+            }
+        }
+
+        /* Button Link Styling */
+        .button-link
+{
+    text-decoration: none;
+    display: inline;
+}
+        .button {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 16px 32px;
+  background-color: #28b463;
+  border: 8px solid #c0dfff;
+  color: white;
+  gap: 8px;
+  border-radius: 50px;
+  cursor: pointer;
+  transition: all 0.3s;
+}
+.text {
+  font-size: 1.7em;
+  font-weight: 700;
+  letter-spacing: 1px;
+}
+.svg {
+  padding-top: 5px;
+  height: 100%;
+  width: fit-content;
+}
+.svg svg {
+  width: 30px;
+  height: 30px;
+}
+.button:hover {
+  border: 8px solid #b1d8ff;
+  background-color: #1b7aff;
+}
+.button:active {
+  border: 5px solid #c0dfff;
+}
+.button:hover .svg svg {
+  animation: jello-vertical 0.9s both;
+  transform-origin: left;
+}
+
+
+@keyframes jello-vertical {
+  0% {
+    transform: scale3d(1, 1, 1);
+  }
+  30% {
+    transform: scale3d(0.75, 1.25, 1);
+  }
+  40% {
+    transform: scale3d(1.25, 0.75, 1);
+  }
+  50% {
+    transform: scale3d(0.85, 1.15, 1);
+  }
+  65% {
+    transform: scale3d(1.05, 0.95, 1);
+  }
+  75% {
+    transform: scale3d(0.95, 1.05, 1);
+  }
+  100% {
+    transform: scale3d(1, 1, 1);
+  }
+}
+
+    </style>
+</head>
+<body>
+
+    <!-- Navigation Bar -->
+    <nav>
+        <a href="#home">Home</a>
+        <a href="{{ url_for('About_us') }}">About Us</a>
+        <a href="{{ url_for('Contact_us') }}">Contact Us</a>
+        <a href="{{ url_for('Feedback') }}">Feedback</a>
+        <a href="{{ url_for('register') }}">Login/Register</a>
+    </nav>
+
+    <!-- Title Section -->
+    <div class="title">IMAGE ENCRYPTION</div>
+
+    <!-- Cards Section -->
+    <div class="cards">
+        <div class="card">
+            <div>
+                <h3>Confidentiality</h3>
+                <p>We ensure your data remains private and accessible only to you. By encrypting sensitive information, we prevent unauthorized access, even if someone gains access to the system. Only those with the correct credentials can view or decrypt your files, ensuring complete confidentiality.
+
+                </p>
+            </div>
+        </div>
+        <div class="card">
+            <div>
+                <h3>Integrity</h3>
+                <p>Your data’s integrity is guaranteed. We protect it from unauthorized changes or corruption. Every file you upload is carefully checked to ensure it remains accurate and unaltered. Any unauthorized modifications are prevented, keeping your information trustworthy and intact.</p>
+            </div>
+        </div>
+        <div class="card">
+            <div>
+                <h3>Security</h3>
+                <p>We prioritize security to protect your data from threats and breaches. With robust safeguards in place, including strong user authentication and secure data storage, we ensure that your files and personal information are safe from unauthorized access or malicious attacks.</p>
+            </div>
+        </div>
+        <!-- Add more cards as needed -->
+    </div>
+
+    <!-- Sign Up Button -->
+    <a href="{{ url_for('register') }}" class="button-link">
+        <button class="button" type="button">
+          <span class="text"> Signup </span> <!-- Button text here -->
+          <span class="svg">
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="50"
+              height="20"
+              viewBox="0 0 38 15"
+              fill="none"
+            >
+              <path
+                fill="white"
+                d="M10 7.519l-.939-.344h0l.939.344zm14.386-1.205l-.981-.192.981.192zm1.276 5.509l.537.843.148-.094.107-.139-.792-.611zm4.819-4.304l-.385-.923h0l.385.923zm7.227.707a1 1 0 0 0 0-1.414L31.343.448a1 1 0 0 0-1.414 0 1 1 0 0 0 0 1.414l5.657 5.657-5.657 5.657a1 1 0 0 0 1.414 1.414l6.364-6.364zM1 7.519l.554.833.029-.019.094-.061.361-.23 1.277-.77c1.054-.609 2.397-1.32 3.629-1.787.617-.234 1.17-.392 1.623-.455.477-.066.707-.008.788.034.025.013.031.021.039.034a.56.56 0 0 1 .058.235c.029.327-.047.906-.39 1.842l1.878.689c.383-1.044.571-1.949.505-2.705-.072-.815-.45-1.493-1.16-1.865-.627-.329-1.358-.332-1.993-.244-.659.092-1.367.305-2.056.566-1.381.523-2.833 1.297-3.921 1.925l-1.341.808-.385.245-.104.068-.028.018c-.011.007-.011.007.543.84zm8.061-.344c-.198.54-.328 1.038-.36 1.484-.032.441.024.94.325 1.364.319.45.786.64 1.21.697.403.054.824-.001 1.21-.09.775-.179 1.694-.566 2.633-1.014l3.023-1.554c2.115-1.122 4.107-2.168 5.476-2.524.329-.086.573-.117.742-.115s.195.038.161.014c-.15-.105.085-.139-.076.685l1.963.384c.192-.98.152-2.083-.74-2.707-.405-.283-.868-.37-1.28-.376s-.849.069-1.274.179c-1.65.43-3.888 1.621-5.909 2.693l-2.948 1.517c-.92.439-1.673.743-2.221.87-.276.064-.429.065-.492.057-.043-.006.066.003.155.127.07.099.024.131.038-.063.014-.187.078-.49.243-.94l-1.878-.689zm14.343-1.053c-.361 1.844-.474 3.185-.413 4.161.059.95.294 1.72.811 2.215.567.544 1.242.546 1.664.459a2.34 2.34 0 0 0 .502-.167l.15-.076.049-.028.018-.011c.013-.008.013-.008-.524-.852l-.536-.844.019-.012c-.038.018-.064.027-.084.032-.037.008.053-.013.125.056.021.02-.151-.135-.198-.895-.046-.734.034-1.887.38-3.652l-1.963-.384zm2.257 5.701l.791.611.024-.031.08-.101.311-.377 1.093-1.213c.922-.954 2.005-1.894 2.904-2.27l-.771-1.846c-1.31.547-2.637 1.758-3.572 2.725l-1.184 1.314-.341.414-.093.117-.025.032c-.01.013-.01.013.781.624zm5.204-3.381c.989-.413 1.791-.42 2.697-.307.871.108 2.083.385 3.437.385v-2c-1.197 0-2.041-.226-3.19-.369-1.114-.139-2.297-.146-3.715.447l.771 1.846z"
+              ></path>
+            </svg>
+          </span>
+        </button>
+      </a>
+      
+      
+
+</body>
+</html>
